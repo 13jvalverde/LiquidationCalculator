@@ -1,0 +1,33 @@
+<style>
+.tblb {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.tblb-row {
+	display: table-row;
+	padding: 0;
+}
+
+.tblb-cell, .tblb-head {
+	display: table-cell;
+	padding: .3rem;
+	border-top: 1px solid #dee2e6;
+	font-family: var(--font-family-body);
+	line-height: 1.6;
+	line-height: var(--font-leading-body);
+	color: #121733;
+	font-weight: 400;
+	text-align: left;
+}
+
+.tblb-cell > input{
+	width:100%;
+	border: 1px solid #ced4da;
+  border-radius: .25rem;
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition-delay: 0s, 0s;
+}
+</style>
