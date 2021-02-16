@@ -1,0 +1,738 @@
+<!--##########################################################################################
+// Created by the office of Jason Wilson-Aguilar.
+// Copyright (C) 2021. Do not re-use without written permission (information@seattlech13.com)
+//############################################################################################-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
+<form id="form-liquidation">
+    <div id="form-content" style="width:1000px;margin:auto;margin-top:20px;border:1px solid #DEE2E6;background:#FFFFFF">
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;border-top:none;background:#5F4BB6;color:#FFFFFF;font-size:1.2em;"><strong>Liquidation Calculator</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Case Number:</div>
+                <div class="tblb-cell"><input type="text" id="input-11" name="CaseNumber" autofocus="" tabindex="11"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Type of Asset:</div>
+                <div class="tblb-cell"><input type="text" id="input-21" name="AssetDescription" tabindex="12"></div>
+                <div class="tblb-cell"><input type="text" id="input-22" name="AssetDescription" tabindex="19"></div>
+                <div class="tblb-cell"><input type="text" id="input-23" name="AssetDescription" tabindex="26"></div>
+                <div class="tblb-cell"><strong>TOTALS</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;background-color:#E8ECF1;"><strong>Determination of Non-Exempt Equity</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Full Fair Market Value of Asset:</div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-31" name="AssetValue" tabindex="13"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-32" name="AssetValue" tabindex="20"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-33" name="AssetValue" tabindex="27"></div>
+                <div class="tblb-cell" id="total-34" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Liens:</div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-41" name="Liens" tabindex="14"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-42" name="Liens" tabindex="21"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-43" name="Liens" tabindex="28"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Debtor's Equity:</strong></div>
+                <div class="tblb-cell" id="total-51" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-52" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-53" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-54" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;background-color:#E8ECF1;"><strong>Determination of Exemptions</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Type of Exemption:</div>
+                <div class="tblb-cell"><input type="text" id="input-61" name="ExemptionDescription" tabindex="15"></div>
+                <div class="tblb-cell"><input type="text" id="input-62" name="ExemptionDescription" tabindex="22"></div>
+                <div class="tblb-cell"><input type="text" id="input-63" name="ExemptionDescription" tabindex="29"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Amount of Exemption:</div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-71" name="ExemptionAmount" tabindex="16"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-72" name="ExemptionAmount" tabindex="23"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-73" name="ExemptionAmount" tabindex="30"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Wildcard Exemption Used:</div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-81" name="WildcardAmount" tabindex="17"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-82" name="WildcardAmount" tabindex="24"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-83" name="WildcardAmount" tabindex="31"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Total Exemptions Used:</strong></div>
+                <div class="tblb-cell" id="total-91" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-92" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-93" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;background-color:#E8ECF1;"><strong>Hypothetical Administrative Costs of Chapter 7 Trustee</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Disbursement Amount:<br><span style="color:#6f8697;font-size:.75em;">Value of asset minus exemptions</span></div>
+                <div class="tblb-cell" id="total-101" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-102" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-103" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">First $5,000:<br><span style="color:#6f8697;font-size:.75em;">25% of Disbursement</span></div>
+                <div class="tblb-cell" id="total-111" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-112" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-113" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Between $5,000 &amp; $50,000:<br><span style="color:#6f8697;font-size:.75em;">10% of Disbursement</span></div>
+                <div class="tblb-cell" id="total-121" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-122" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-123" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Between $50,000 &amp; $1,000,000:<br><span style="color:#6f8697;font-size:.75em;">5% of Disbursement</span></div>
+                <div class="tblb-cell" id="total-131" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-132" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-133" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Greater Than $1,000,000:<br><span style="color:#6f8697;font-size:.75em;">3% of Disbursement</span></div>
+                <div class="tblb-cell" id="total-141" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-142" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-143" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Total Hypothetical Chapter 7 Trustee Fees:</strong></div>
+                <div class="tblb-cell" id="total-151" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-152" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-153" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-154" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;background-color:#E8ECF1;"><strong>Final Determination of Values</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Full Fair Market Value of Asset:</strong></div>
+                <div class="tblb-cell" id="total-161" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-162" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-163" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;padding-left:25px;">Percentage Cost of Sale:</div>
+                <div class="tblb-cell">
+                    <select name="PercentageCOS" id="select-171" style="width:100%;font-size:1em;">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select name="PercentageCOS" id="select-172" style="width:100%;font-size:1em;">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select name="PercentageCOS" id="select-173" style="width:100%;font-size:1em;">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;padding-left:25px;">Hypothetical Cost of Sale:</div>
+                <div class="tblb-cell" id="total-181" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-182" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-183" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;padding-left:25px;">Chapter 7 Trustee Fees:</div>
+                <div class="tblb-cell" id="total-191" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-192" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-193" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Subtotal:</strong></div>
+                <div class="tblb-cell" id="total-201" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-202" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-203" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;padding-left:25px;">Liens:</div>
+                <div class="tblb-cell" id="total-211" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-212" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-213" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Net Equity:</strong></div>
+                <div class="tblb-cell" id="total-221" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-222" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-223" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-224"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;padding-left:25px;">Percentage of Ownership:</div>
+                <div class="tblb-cell"><input class="percent-format" type="text" id="input-231" name="PercentageOwnership" value="100.00%" tabindex="18"></div>
+                <div class="tblb-cell"><input class="percent-format" type="text" id="input-232" name="PercentageOwnership" value="100.00%" tabindex="25"></div>
+                <div class="tblb-cell"><input class="percent-format" type="text" id="input-233" name="PercentageOwnership" value="100.00%" tabindex="32"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Total Equity:</strong></div>
+                <div class="tblb-cell" id="total-241" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-242" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-243" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-244" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;"><strong>Total Exemptions Used:</strong></div>
+                <div class="tblb-cell" id="total-251" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-252" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-253" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-254" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="text-align:center;background-color:#E8ECF1;"><strong>Minimum Distribution to Priority and General Unsecured Claims to Protect Non-Exempt Equity</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell" style="width:400px;">Minimum Distribution to all Unsecured Claims:</div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell" id="total-264" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+            </div>
+        </div>
+    </div>
+    <div style="width:1000px;margin:auto;margin-top:20px;">
+        <button id="btn-reset" style="background:#FF5964;border-radius:3px;width:150px;">Reset</button>
+        <button id="btn-pdf" style="border-radius:3px;width:150px;">Save PDF</button>
+    </div>
+</form>
+
+<!-- Initialize Objects -->
+<script>
+// Object to store input values.  3 Assets, with 9 properties.
+const liquidationObject = {
+    'asset': {
+        '1': {
+            'fairMarketValue': 0,
+            'percentageOwnership': 100,
+            'liens': 0,
+            'exemption': 0,
+            'wildcardExemption': 0,
+            'chapter7Fees': 0,
+            'percentageCOS': 0.09,
+            get equity() {
+                return (this.fairMarketValue - this.liens);
+            },
+            get costOfSale() {
+                return (this.fairMarketValue * this.percentageCOS);
+            }
+        },
+        '2': {
+            'fairMarketValue': 0,
+            'percentageOwnership': 100,
+            'liens': 0,
+            'exemption': 0,
+            'wildcardExemption': 0,
+            'chapter7Fees': 0,
+            'percentageCOS': 0.09,
+            get equity() {
+                return (this.fairMarketValue - this.liens);
+            },
+            get costOfSale() {
+                return (this.fairMarketValue * this.percentageCOS);
+            }
+        },
+        '3': {
+            'fairMarketValue': 0,
+            'percentageOwnership': 100,
+            'liens': 0,
+            'exemption': 0,
+            'wildcardExemption': 0,
+            'chapter7Fees': 0,
+            'percentageCOS': 0.09,
+            get equity() {
+                return (this.fairMarketValue - this.liens);
+            },
+            get costOfSale() {
+                return (this.fairMarketValue * this.percentageCOS);
+            }
+        }
+    }
+};
+
+
+// A nested object proxy handler getter. 
+// https://gist.github.com/eeropic/2742be1f1e03d94a7d1bc558ef1645b6#file-nestedproxy-js
+const handler = {
+    get(target, key) {
+        if (key == 'isProxy')
+            return true;
+        const prop = target[key];
+        if (typeof prop == 'undefined')
+            return;
+        if (!prop.isProxy && typeof prop === 'object')
+            target[key] = new Proxy(prop, handler);
+        return target[key];
+    },
+    set(target, key, value) {
+        target[key] = value;
+        return true;
+    }
+};
+
+// Reset proxyObject values to default, ignoring properties with getters. 
+function proxyReset() {
+    var i
+    var len = Object.keys(proxyObject.asset).length
+    for (i = 1; i <= len; i++) {
+        for (let prop in proxyObject.asset[i]) {
+            var isGetter = !!Object.getOwnPropertyDescriptor(proxyObject.asset[i], [prop])['get']
+            if (!isGetter) {
+                if(prop == 'percentageOwnership'){
+                    proxyObject.asset[i][prop] = 100;
+                }else if(prop == 'percentageCOS'){
+                    proxyObject.asset[i][prop] = 0.09;
+                }
+                else{
+                    proxyObject.asset[i][prop] = 0;
+                }
+            }
+        }
+    }
+};
+
+// Create a proxy object with a target of liquidationObject
+const proxyObject = new Proxy(liquidationObject, handler);
+</script>
+
+<!-- Initialize Form -->
+<script>
+const formInit = function(){
+    document.getElementById('btn-reset').addEventListener('click', formReset);
+    document.getElementById('btn-pdf').addEventListener('click', formPDF);
+};
+
+const formReset = function(event) {
+    event.preventDefault();
+    document.getElementById('form-liquidation').reset();
+    proxyReset();
+    calcAll();
+    jQuery('html, body').animate({ scrollTop: 0 }, 'fast');
+};
+
+const formPDF = function(event) {
+    event.preventDefault();
+    generatePDF();
+};
+
+// initialize the form once the page has loaded
+document.addEventListener('DOMContentLoaded',formInit);
+
+// ignore enter keypress event
+document.addEventListener('keypress', function (e) {
+    if (e.keyCode === 13 || e.which === 13) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+
+<!-- Format Inputs -->
+<script>
+const money = document.querySelectorAll(".money-format")
+money.forEach(function(input) {
+    input.addEventListener("change", function() {
+        moneyFormat(input);
+    }); 
+});
+
+const percent = document.querySelectorAll(".percent-format")
+percent.forEach(function(input) {
+    input.addEventListener("change", function() {
+        percentFormat(input);
+    }); 
+});
+
+// Replace negative numbers with zero. Replace non-numeric values with blank.
+function moneyFormat(inputValue) {
+    let val = inputValue.value
+    let num = Number(val.toString().replace(/[$,]+/g, ""))
+    let min = 0
+    if (!isNaN(parseFloat(num))) {
+        if (num < min) {
+            inputValue.value = min.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        } else {
+            inputValue.value = num.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        }
+    } else {
+        inputValue.value = "";
+    }
+};
+
+// Maximum percent allowed is 100. Replace non-numeric values with blank.
+function percentFormat(inputValue) {
+    let val = inputValue.value
+    let num = Number(val.toString().replace(/[%,]+/g, ""))
+    let min = 0
+    let max = 100
+    if (!isNaN(parseFloat(num))) {
+        if (num > max) {
+            inputValue.value = parseFloat(max).toFixed(2) + "%";
+        } else if (num < min) {
+            inputValue.value = parseFloat(min).toFixed(2) + "%";
+        } else {
+            inputValue.value = parseFloat(num).toFixed(2) + "%";
+        }
+    } else {
+        inputValue.value = parseFloat(max).toFixed(2) + "%";
+    }
+};
+
+// remove formating from inputs when performing calculations.
+function removeFormat(inputValue){
+    let val = inputValue
+    return Number(val.replace(/[^0-9.-]+/g, ""));
+};
+</script>
+
+<!-- Update proxyObject values-->
+<script>
+// Update proxyObject when input values change.
+const fairMarketInput = document.querySelectorAll("#input-31,#input-32,#input-33")
+fairMarketInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        let id = this.id
+        let asset = id.charAt(id.length - 1)
+        let val = this.value
+        proxyObject.asset[asset].fairMarketValue = parseFloat(removeFormat(val));
+        calcAll();
+    });
+});
+
+// Update proxyObject when input values change.
+const percentageCOSInput = document.querySelectorAll("#select-171,#select-172,#select-173")
+percentageCOSInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        let id = this.id
+        let asset = id.charAt(id.length - 1)
+        let val = this.value
+        proxyObject.asset[asset].percentageCOS = parseFloat(removeFormat(val));
+        calcAll();
+    });
+});
+
+// Update proxyObject when input values change.
+const percentageOwnInput = document.querySelectorAll("#input-231,#input-232,#input-233")
+percentageOwnInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        let id = this.id
+        let asset = id.charAt(id.length - 1)
+        let val = this.value
+        proxyObject.asset[asset].percentageOwnership = parseFloat(removeFormat(val));
+        calcAll();
+    });
+});
+
+// Update proxyObject when input values change.
+const liensInput = document.querySelectorAll("#input-41,#input-42,#input-43")
+liensInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        let id = this.id
+        let asset = id.charAt(id.length -1 )
+        let val = this.value
+        proxyObject.asset[asset].liens = parseFloat(removeFormat(val));
+        calcAll();
+    });
+});
+
+// Update proxyObject when input values change. Don't store exemption amount when zero or negative eqity exists.
+const exemptionInput = document.querySelectorAll("#input-71,#input-72,#input-73")
+exemptionInput.forEach(function(input) {
+    input.addEventListener("change", function(){
+        let id = this.id
+        let asset = id.charAt(id.length - 1)
+        let val = this.value
+        if(proxyObject.asset[asset].equity >= 0){
+            proxyObject.asset[asset].exemption = parseFloat(removeFormat(val));
+        }
+        calcAll();
+    });
+});
+
+// Update proxyObject when input values change. Don't store exemption amount when zero or negative eqity exists.
+const wildcardInput = document.querySelectorAll("#input-81,#input-82,#input-83")
+wildcardInput.forEach(function(input) {
+    input.addEventListener("change", function(){
+        let id = this.id
+        let asset = id.charAt(id.length - 1)
+        let val = this.value
+        if(proxyObject.asset[asset].equity >= 0){
+            proxyObject.asset[asset].wildcardExemption = parseFloat(removeFormat(val));
+        }
+        calcAll();
+    });
+});
+</script>
+
+<!-- Calculate Values -->
+<script>
+function fairMarketSum() {
+    let sum = proxyObject.asset[1].fairMarketValue + 
+              proxyObject.asset[2].fairMarketValue + 
+              proxyObject.asset[3].fairMarketValue;
+    document.getElementById("total-34").innerHTML = sum.toLocaleString("en-US", { style: "currency", currency: "USD" });
+};
+
+function debtorAGI() {
+    let agi1 = proxyObject.asset[1].fairMarketValue
+    let agi2 = proxyObject.asset[2].fairMarketValue
+    let agi3 = proxyObject.asset[3].fairMarketValue
+    document.getElementById("total-161").innerHTML = agi1.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-162").innerHTML = agi2.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-163").innerHTML = agi3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+}
+
+function liens() {
+    let prl1 = proxyObject.asset[1].liens
+    let prl2 = proxyObject.asset[2].liens
+    let prl3 = proxyObject.asset[3].liens
+    document.getElementById("total-211").innerHTML = prl1.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-212").innerHTML = prl2.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-213").innerHTML = prl3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+};
+
+// Ignore negative equity in equityTotal calculation. 
+function debtorEquity() {
+    let equity1 = proxyObject.asset[1].equity
+    let equity2 = proxyObject.asset[2].equity
+    let equity3 = proxyObject.asset[3].equity
+    let total1 = document.getElementById("total-51")
+    let total2 = document.getElementById("total-52")
+    let total3 = document.getElementById("total-53")
+    let equityTotal = Math.max(0, equity1) + Math.max(0, equity2) + Math.max(0, equity3)
+
+    // Change background when negative equity is calculated.
+    equity1 < 0 ? total1.style.background = '#FF5964' : total1.style.background = '#FFFF47';
+    equity2 < 0 ? total2.style.background = '#FF5964' : total2.style.background = '#FFFF47';
+    equity3 < 0 ? total3.style.background = '#FF5964' : total3.style.background = '#FFFF47';
+
+    total1.innerHTML = equity1.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    total2.innerHTML = equity2.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    total3.innerHTML = equity3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-54").innerHTML = equityTotal.toLocaleString("en-US", { style: "currency", currency: "USD" });
+};
+
+// Update proxyObject when function called, in addition to the input change event.  Necessary when other input values change, which 
+// affect the exemptionTotal calculation. 
+function exemptionsSum() {
+    var exemptionTotal = 0
+    var i
+    var len = Object.keys(proxyObject.asset).length
+    for (i = 1; i <= len; i++) {
+        proxyObject.asset[i].exemption = parseFloat(removeFormat(document.getElementById("input-7" + i).value));
+        proxyObject.asset[i].wildcardExemption = parseFloat(removeFormat(document.getElementById("input-8" + i).value));
+        var equity = Math.max(0, proxyObject.asset[i].equity);
+        var exemptions = Math.min(equity, (proxyObject.asset[i].exemption + proxyObject.asset[i].wildcardExemption));
+        exemptionTotal += exemptions
+        document.getElementById("total-9" + i).innerHTML = exemptions.toLocaleString("en-US", {style: "currency",currency: "USD"});
+    };
+};
+
+function chapter7Fees() {
+    var tier1 = 5000
+    var tier2 = 50000
+    var tier3 = 1000000
+    var fee1 = 1250
+    var fee2 = 5750
+    var fee3 = 53250
+    var feesTotal = 0
+
+    var i
+    var len = Object.keys(proxyObject.asset).length
+    for (i = 1; i <= len; i++) {
+        var equity = Math.max(0, proxyObject.asset[i].equity) // Ignore negatvie equity when calculating fees. 
+        var liens = proxyObject.asset[i].liens
+        var exemptions = Math.min(equity, (proxyObject.asset[i].exemption + proxyObject.asset[i].wildcardExemption)) //Ignore exemptions greater than equity. 
+        var disbursementAmount = equity + liens - exemptions
+        var feesSubTotal = 0
+
+        // Clear previous calculated values. 
+        document.getElementById("total-10" + i).innerHTML = '$0.00'
+        document.getElementById("total-11" + i).innerHTML = '$0.00'
+        document.getElementById("total-12" + i).innerHTML = '$0.00'
+        document.getElementById("total-13" + i).innerHTML = '$0.00'
+        document.getElementById("total-14" + i).innerHTML = '$0.00'
+        document.getElementById("total-15" + i).innerHTML = '$0.00'
+
+        if (equity - exemptions == 0) {
+            document.getElementById("total-10" + i).innerHTML = '$0.00'
+            proxyObject.asset[i].chapter7Fees = feesSubTotal;
+        } 
+        
+        else if (disbursementAmount < tier1) {
+            document.getElementById("total-10" + i).innerHTML = disbursementAmount.toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-11" + i).innerHTML = (disbursementAmount * 0.25).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            feesSubTotal = (disbursementAmount * 0.25);
+            feesTotal += feesSubTotal
+            proxyObject.asset[i].chapter7Fees = feesSubTotal;
+        } 
+        
+        else if (disbursementAmount >= tier1 && disbursementAmount < tier2) {
+            document.getElementById("total-10" + i).innerHTML = disbursementAmount.toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-11" + i).innerHTML = (0.25 * tier1).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-12" + i).innerHTML = (0.1 * (disbursementAmount - tier1)).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            feesSubTotal = parseFloat((0.1 * (disbursementAmount - tier1)) + fee1);
+            feesTotal += feesSubTotal
+            proxyObject.asset[i].chapter7Fees = feesSubTotal;
+        } 
+        
+        else if (disbursementAmount >= tier2 && disbursementAmount < tier3) {
+            document.getElementById("total-10" + i).innerHTML = disbursementAmount.toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-11" + i).innerHTML = (0.25 * tier1).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-12" + i).innerHTML = (0.1 * (tier2 - tier1)).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-13" + i).innerHTML = (0.05 * (disbursementAmount - tier2)).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            feesSubTotal = parseFloat((0.05 * (disbursementAmount - tier2)) + fee2);
+            feesTotal += feesSubTotal
+            proxyObject.asset[i].chapter7Fees = feesSubTotal;
+        } 
+        
+        else if (disbursementAmount >= tier3) {
+            document.getElementById("total-10" + i).innerHTML = disbursementAmount.toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-11" + i).innerHTML = (0.25 * tier1).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-12" + i).innerHTML = (0.1 * (tier2 - tier1)).toLocaleString("en-US", {style: "currency",currency: "USD"});   
+            document.getElementById("total-13" + i).innerHTML = (0.05 * (tier3 - tier2)).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            document.getElementById("total-14" + i).innerHTML = (0.03 * (disbursementAmount - tier3)).toLocaleString("en-US", {style: "currency",currency: "USD"});
+            feesSubTotal = parseFloat((0.03 * (disbursementAmount - tier3)) + fee3);
+            feesTotal += feesSubTotal
+            proxyObject.asset[i].chapter7Fees = feesSubTotal;
+        }
+        document.getElementById("total-15" + i).innerHTML = feesSubTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-19" + i).innerHTML = feesSubTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-154").innerHTML = feesTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+    }
+};
+
+function costOfSale() {
+    var exemptionTotal = 0
+    var netEquityTotal = 0
+    var debtorEquityTotal = 0
+    var distributionUnsecureds = 0
+
+    var i
+    var len = Object.keys(proxyObject.asset).length
+    for (i = 1; i <= len; i++) {
+        var cos = proxyObject.asset[i].costOfSale
+        var cosSubTotal = proxyObject.asset[i].fairMarketValue - proxyObject.asset[i].costOfSale - proxyObject.asset[i].chapter7Fees
+        var equity = Math.max(0, proxyObject.asset[i].equity); // ignore negative equity 
+        var netEquity = Math.max(0, cosSubTotal - proxyObject.asset[i].liens) // ignore negative net equity.  
+        var debtorEquity = Math.max(0, parseFloat((cosSubTotal - proxyObject.asset[i].liens) * proxyObject.asset[i].percentageOwnership /100)) // ignore negative net equity.  
+        var exemptions = Math.min(debtorEquity, (proxyObject.asset[i].exemption + proxyObject.asset[i].wildcardExemption)); // ignore exemptions greater than equity. 
+
+        exemptionTotal += exemptions
+        netEquityTotal += netEquity
+        debtorEquityTotal += debtorEquity 
+        distributionUnsecureds += debtorEquity - exemptions
+
+        document.getElementById("total-18" + i).innerHTML = cos.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-20" + i).innerHTML = cosSubTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-22" + i).innerHTML = netEquity.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-24" + i).innerHTML = debtorEquity.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-25" + i).innerHTML = exemptions.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-244").innerHTML = debtorEquityTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-254").innerHTML = exemptionTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-264").innerHTML = Math.max(0, distributionUnsecureds).toLocaleString("en-US", {style: "currency",currency: "USD"});
+        
+    }
+};
+
+// Helper function that calls all calculation functions. 
+function calcAll() {
+    fairMarketSum();
+    debtorAGI();
+    liens();
+    debtorEquity();
+    exemptionsSum();
+    chapter7Fees();
+    costOfSale();
+};
+</script>
+
+<!-- Create PDF -->
+<script>
+function generatePDF() {
+    var caseNumber = document.getElementById("input-11").value
+    var fileName = (caseNumber == '' ? 'LiquidationCalc' : 'LiquidationCalc_' + caseNumber + '.pdf')
+    var content = document.getElementById("form-content")
+    var w = content.offsetWidth
+    var h = content.offsetHeight
+
+    html2canvas(content, {
+        onrendered: function(canvas) {
+            var img = canvas.toDataURL("image/jpeg", 1);
+            var doc = new jsPDF("p", "pt", [w, h]);
+            doc.addImage(img, "JPEG", 0, 0, w, h);
+            doc.save(fileName);
+        },
+    });
+}
+</script>
