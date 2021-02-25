@@ -719,19 +719,23 @@ function calcAll() {
 
 <!-- Create PDF -->
 <script>
-    function generatePDF() {
-        var caseNumber = document.getElementById("input-11").value
-        var fileName = (caseNumber == '' ? 'LiquidationCalc' : 'LiquidationCalc_' + caseNumber + '.pdf')
-        var content = document.getElementById("form-content")
-        var w = content.offsetWidth
-        var h = content.offsetHeight
-        html2canvas(content, {
-            scrollY: -window.scrollY,
-            scale:2}).then(function(canvas){
-                var img = canvas.toDataURL("image/jpeg", 1);
-                var doc = new jsPDF("p", "pt", [w, h]);
-                doc.addImage(img, "JPEG", 0, 0, w, h);
-                doc.save(fileName);
-            })
-        }
+function generatePDF() {
+    var caseNumber = document.getElementById("input-11").value
+    var fileName = (caseNumber == '' ? 'LiquidationCalc' : 'LiquidationCalc_' + caseNumber + '.pdf')
+    var content = document.getElementById("form-content")
+    var w = content.offsetWidth
+    var h = content.offsetHeight
+    html2canvas(content, {
+        scrollY: -window.scrollY,
+        scale:2}).then(function(canvas){
+            var date = new Date();
+            var longDate = date.toLocaleDateString('en-US',{weekday:"long",year:"numeric",month:"short",day:"numeric"});
+            var localTime = date.toLocaleTimeString();
+            var img = canvas.toDataURL("image/jpeg", 1);
+            var doc = new jsPDF("p", "pt", [w, h]);
+            doc.addImage(img, "JPEG", 20, 20, w-40, h-80);
+            doc.text("https://seattlech13.com/liquidation-calculator", 20, h-20).text(longDate + " " + localTime, w-20, h-20,'right');
+            doc.save(fileName);
+        })
+    }
 </script>
