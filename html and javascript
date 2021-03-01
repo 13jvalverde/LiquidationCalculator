@@ -1,13 +1,14 @@
 <!--##########################################################################################
 // Created by the office of Jason Wilson-Aguilar.
-// Copyright (C) 2021. Do not re-use without written permission (information@seattlech13.com)
+// Copyright (C) 2021. Do not re-use without written permission (information@seattlech13.com).
 //############################################################################################-->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
 
 <form id="form-liquidation">
-    <div id="form-content" style="width:1000px;margin:auto;margin-top:20px;border:1px solid #DEE2E6;background:#FFFFFF">
+    <div id="form-content" style="width:1200px;margin:auto;margin-top:20px;border:1px solid #DEE2E6;background:#FFFFFF">
         <div class="tblb">
             <div class="tblb-row">
                 <div class="tblb-cell" style="text-align:center;border-top:none;background:#5F4BB6;color:#FFFFFF;font-size:1.2em;"><strong>Liquidation Calculator</strong></div>
@@ -20,12 +21,14 @@
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
                 <div class="tblb-cell" style="width:400px;">Type of Asset:</div>
                 <div class="tblb-cell"><input type="text" id="input-21" name="AssetDescription" tabindex="12"></div>
                 <div class="tblb-cell"><input type="text" id="input-22" name="AssetDescription" tabindex="19"></div>
                 <div class="tblb-cell"><input type="text" id="input-23" name="AssetDescription" tabindex="26"></div>
+                <div class="tblb-cell"><input type="text" id="input-24" name="AssetDescription" tabindex="33"></div>
                 <div class="tblb-cell"><strong>TOTALS</strong></div>
             </div>
         </div>
@@ -40,13 +43,15 @@
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-31" name="AssetValue" tabindex="13"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-32" name="AssetValue" tabindex="20"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-33" name="AssetValue" tabindex="27"></div>
-                <div class="tblb-cell" id="total-34" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-34" name="AssetValue" tabindex="34"></div>
+                <div class="tblb-cell" id="total-35" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
             <div class="tblb-row">
                 <div class="tblb-cell" style="width:400px;">Liens:</div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-41" name="Liens" tabindex="14"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-42" name="Liens" tabindex="21"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-43" name="Liens" tabindex="28"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-44" name="Liens" tabindex="35"></div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -54,7 +59,8 @@
                 <div class="tblb-cell" id="total-51" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-52" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-53" style="background-color:#FFFF47;">$0.00</div>
-                <div class="tblb-cell" id="total-54" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell" id="total-54" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-55" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
         </div>
         <div class="tblb">
@@ -68,6 +74,7 @@
                 <div class="tblb-cell"><input type="text" id="input-61" name="ExemptionDescription" tabindex="15"></div>
                 <div class="tblb-cell"><input type="text" id="input-62" name="ExemptionDescription" tabindex="22"></div>
                 <div class="tblb-cell"><input type="text" id="input-63" name="ExemptionDescription" tabindex="29"></div>
+                <div class="tblb-cell"><input type="text" id="input-64" name="ExemptionDescription" tabindex="36"></div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -75,6 +82,7 @@
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-71" name="ExemptionAmount" tabindex="16"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-72" name="ExemptionAmount" tabindex="23"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-73" name="ExemptionAmount" tabindex="30"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-74" name="ExemptionAmount" tabindex="37"></div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -82,6 +90,7 @@
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-81" name="WildcardAmount" tabindex="17"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-82" name="WildcardAmount" tabindex="24"></div>
                 <div class="tblb-cell"><input class="money-format" type="text" id="input-83" name="WildcardAmount" tabindex="31"></div>
+                <div class="tblb-cell"><input class="money-format" type="text" id="input-84" name="WildcardAmount" tabindex="38"></div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -89,6 +98,7 @@
                 <div class="tblb-cell" id="total-91" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-92" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-93" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-94" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
         </div>
@@ -103,6 +113,7 @@
                 <div class="tblb-cell" id="total-101" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-102" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-103" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-104" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -110,6 +121,7 @@
                 <div class="tblb-cell" id="total-111" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-112" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-113" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-114" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -117,6 +129,7 @@
                 <div class="tblb-cell" id="total-121" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-122" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-123" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-124" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -124,6 +137,7 @@
                 <div class="tblb-cell" id="total-131" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-132" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-133" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-134" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -131,6 +145,7 @@
                 <div class="tblb-cell" id="total-141" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-142" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-143" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-144" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -138,7 +153,8 @@
                 <div class="tblb-cell" id="total-151" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-152" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-153" style="background-color:#FFFF47;">$0.00</div>
-                <div class="tblb-cell" id="total-154" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell" id="total-154" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-155" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
         </div>
         <div class="tblb">
@@ -152,6 +168,7 @@
                 <div class="tblb-cell" id="total-161" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-162" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-163" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-164" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -186,6 +203,16 @@
                         </optgroup>
                     </select>
                 </div>
+                <div class="tblb-cell">
+                    <select name="PercentageCOS" id="select-174" style="width:100%;font-size:1em;">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -193,6 +220,7 @@
                 <div class="tblb-cell" id="total-181" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-182" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-183" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-184" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -200,6 +228,7 @@
                 <div class="tblb-cell" id="total-191" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-192" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-193" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-194" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -207,6 +236,7 @@
                 <div class="tblb-cell" id="total-201" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-202" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-203" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-204" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -214,6 +244,7 @@
                 <div class="tblb-cell" id="total-211" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-212" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-213" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-214" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -221,13 +252,15 @@
                 <div class="tblb-cell" id="total-221" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-222" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-223" style="background-color:#FFFF47;">$0.00</div>
-                <div class="tblb-cell" id="total-224"></div>
+                <div class="tblb-cell" id="total-224" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
                 <div class="tblb-cell" style="width:400px;padding-left:25px;">Percentage of Ownership:</div>
                 <div class="tblb-cell"><input class="percent-format" type="text" id="input-231" name="PercentageOwnership" value="100.00%" tabindex="18"></div>
                 <div class="tblb-cell"><input class="percent-format" type="text" id="input-232" name="PercentageOwnership" value="100.00%" tabindex="25"></div>
                 <div class="tblb-cell"><input class="percent-format" type="text" id="input-233" name="PercentageOwnership" value="100.00%" tabindex="32"></div>
+                <div class="tblb-cell"><input class="percent-format" type="text" id="input-234" name="PercentageOwnership" value="100.00%" tabindex="39"></div>
                 <div class="tblb-cell"></div>
             </div>
             <div class="tblb-row">
@@ -235,7 +268,8 @@
                 <div class="tblb-cell" id="total-241" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-242" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-243" style="background-color:#FFFF47;">$0.00</div>
-                <div class="tblb-cell" id="total-244" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell" id="total-244" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-245" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
 
             <div class="tblb-row">
@@ -243,7 +277,8 @@
                 <div class="tblb-cell" id="total-251" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-252" style="background-color:#FFFF47;">$0.00</div>
                 <div class="tblb-cell" id="total-253" style="background-color:#FFFF47;">$0.00</div>
-                <div class="tblb-cell" id="total-254" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell" id="total-254" style="background-color:#FFFF47;">$0.00</div>
+                <div class="tblb-cell" id="total-255" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
         </div>
         <div class="tblb">
@@ -257,11 +292,12 @@
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
-                <div class="tblb-cell" id="total-264" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell" id="total-265" style="background-color:#FFFF47;font-weight:bold;">$0.00</div>
             </div>
         </div>
     </div>
-    <div style="width:1000px;margin:auto;margin-top:20px;">
+    <div style="width:1200px;margin:auto;margin-top:20px;">
         <button id="btn-reset" style="background:#FF5964;border-radius:3px;width:150px;">Reset</button>
         <button id="btn-pdf" style="border-radius:3px;width:150px;">Save PDF</button>
     </div>
@@ -269,7 +305,7 @@
 
 <!-- Initialize Objects -->
 <script>
-// Object to store input values.  3 Assets, with 9 properties.
+// Object to store input values.  4 assets, with 9 properties.
 const liquidationObject = {
     'asset': {
         '1': {
@@ -303,6 +339,21 @@ const liquidationObject = {
             }
         },
         '3': {
+            'fairMarketValue': 0,
+            'percentageOwnership': 100,
+            'liens': 0,
+            'exemption': 0,
+            'wildcardExemption': 0,
+            'chapter7Fees': 0,
+            'percentageCOS': 0.09,
+            get equity() {
+                return (this.fairMarketValue - this.liens);
+            },
+            get costOfSale() {
+                return (this.fairMarketValue * this.percentageCOS);
+            }
+        },
+        '4': {
             'fairMarketValue': 0,
             'percentageOwnership': 100,
             'liens': 0,
@@ -421,10 +472,10 @@ function moneyFormat(inputValue) {
     if (!isNaN(parseFloat(num))) {
         if (num < min) {
             inputValue.value = min.toLocaleString("en-US", {style: "currency",currency: "USD"});
-        } else {
+        }else {
             inputValue.value = num.toLocaleString("en-US", {style: "currency",currency: "USD"});
         }
-    } else {
+    }else {
         inputValue.value = "";
     }
 };
@@ -438,12 +489,12 @@ function percentFormat(inputValue) {
     if (!isNaN(parseFloat(num))) {
         if (num > max) {
             inputValue.value = parseFloat(max).toFixed(2) + "%";
-        } else if (num < min) {
+        }else if (num < min) {
             inputValue.value = parseFloat(min).toFixed(2) + "%";
-        } else {
+        }else {
             inputValue.value = parseFloat(num).toFixed(2) + "%";
         }
-    } else {
+    }else {
         inputValue.value = parseFloat(max).toFixed(2) + "%";
     }
 };
@@ -458,7 +509,7 @@ function removeFormat(inputValue){
 <!-- Update proxyObject values-->
 <script>
 // Update proxyObject when input values change.
-const fairMarketInput = document.querySelectorAll("#input-31,#input-32,#input-33")
+const fairMarketInput = document.querySelectorAll("#input-31,#input-32,#input-33,#input-34")
 fairMarketInput.forEach(function(input) {
     input.addEventListener("change", function() {
         let id = this.id
@@ -470,7 +521,7 @@ fairMarketInput.forEach(function(input) {
 });
 
 // Update proxyObject when input values change.
-const percentageCOSInput = document.querySelectorAll("#select-171,#select-172,#select-173")
+const percentageCOSInput = document.querySelectorAll("#select-171,#select-172,#select-173,#select-174")
 percentageCOSInput.forEach(function(input) {
     input.addEventListener("change", function() {
         let id = this.id
@@ -482,7 +533,7 @@ percentageCOSInput.forEach(function(input) {
 });
 
 // Update proxyObject when input values change.
-const percentageOwnInput = document.querySelectorAll("#input-231,#input-232,#input-233")
+const percentageOwnInput = document.querySelectorAll("#input-231,#input-232,#input-233,#input-234")
 percentageOwnInput.forEach(function(input) {
     input.addEventListener("change", function() {
         let id = this.id
@@ -494,7 +545,7 @@ percentageOwnInput.forEach(function(input) {
 });
 
 // Update proxyObject when input values change.
-const liensInput = document.querySelectorAll("#input-41,#input-42,#input-43")
+const liensInput = document.querySelectorAll("#input-41,#input-42,#input-43,#input-44")
 liensInput.forEach(function(input) {
     input.addEventListener("change", function() {
         let id = this.id
@@ -506,7 +557,7 @@ liensInput.forEach(function(input) {
 });
 
 // Update proxyObject when input values change. Don't store exemption amount when zero or negative eqity exists.
-const exemptionInput = document.querySelectorAll("#input-71,#input-72,#input-73")
+const exemptionInput = document.querySelectorAll("#input-71,#input-72,#input-73,#input-74")
 exemptionInput.forEach(function(input) {
     input.addEventListener("change", function(){
         let id = this.id
@@ -520,7 +571,7 @@ exemptionInput.forEach(function(input) {
 });
 
 // Update proxyObject when input values change. Don't store exemption amount when zero or negative eqity exists.
-const wildcardInput = document.querySelectorAll("#input-81,#input-82,#input-83")
+const wildcardInput = document.querySelectorAll("#input-81,#input-82,#input-83,#input-84")
 wildcardInput.forEach(function(input) {
     input.addEventListener("change", function(){
         let id = this.id
@@ -539,26 +590,32 @@ wildcardInput.forEach(function(input) {
 function fairMarketSum() {
     let sum = proxyObject.asset[1].fairMarketValue + 
               proxyObject.asset[2].fairMarketValue + 
-              proxyObject.asset[3].fairMarketValue;
-    document.getElementById("total-34").innerHTML = sum.toLocaleString("en-US", { style: "currency", currency: "USD" });
+              proxyObject.asset[3].fairMarketValue + 
+              proxyObject.asset[4].fairMarketValue;
+    document.getElementById("total-35").innerHTML = sum.toLocaleString("en-US", { style: "currency", currency: "USD" });
 };
 
 function debtorAGI() {
     let agi1 = proxyObject.asset[1].fairMarketValue
     let agi2 = proxyObject.asset[2].fairMarketValue
     let agi3 = proxyObject.asset[3].fairMarketValue
+    let agi4 = proxyObject.asset[4].fairMarketValue
     document.getElementById("total-161").innerHTML = agi1.toLocaleString("en-US", { style: "currency", currency: "USD" });
     document.getElementById("total-162").innerHTML = agi2.toLocaleString("en-US", { style: "currency", currency: "USD" });
     document.getElementById("total-163").innerHTML = agi3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-164").innerHTML = agi4.toLocaleString("en-US", { style: "currency", currency: "USD" });
 }
 
 function liens() {
-    let prl1 = proxyObject.asset[1].liens
-    let prl2 = proxyObject.asset[2].liens
-    let prl3 = proxyObject.asset[3].liens
-    document.getElementById("total-211").innerHTML = prl1.toLocaleString("en-US", { style: "currency", currency: "USD" });
-    document.getElementById("total-212").innerHTML = prl2.toLocaleString("en-US", { style: "currency", currency: "USD" });
-    document.getElementById("total-213").innerHTML = prl3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    let liens1 = proxyObject.asset[1].liens
+    let liens2 = proxyObject.asset[2].liens
+    let liens3 = proxyObject.asset[3].liens
+    let liens4 = proxyObject.asset[4].liens
+    document.getElementById("total-211").innerHTML = liens1.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-212").innerHTML = liens2.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-213").innerHTML = liens3.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-214").innerHTML = liens4.toLocaleString("en-US", { style: "currency", currency: "USD" });
+
 };
 
 // Ignore negative equity in equityTotal calculation. 
@@ -566,20 +623,24 @@ function debtorEquity() {
     let equity1 = proxyObject.asset[1].equity
     let equity2 = proxyObject.asset[2].equity
     let equity3 = proxyObject.asset[3].equity
+    let equity4 = proxyObject.asset[4].equity
     let total1 = document.getElementById("total-51")
     let total2 = document.getElementById("total-52")
     let total3 = document.getElementById("total-53")
-    let equityTotal = Math.max(0, equity1) + Math.max(0, equity2) + Math.max(0, equity3)
+    let total4 = document.getElementById("total-54")
+    let equityTotal = Math.max(0, equity1) + Math.max(0, equity2) + Math.max(0, equity3) + Math.max(0, equity4)
 
     // Change background when negative equity is calculated.
     equity1 < 0 ? total1.style.background = '#FF5964' : total1.style.background = '#FFFF47';
     equity2 < 0 ? total2.style.background = '#FF5964' : total2.style.background = '#FFFF47';
     equity3 < 0 ? total3.style.background = '#FF5964' : total3.style.background = '#FFFF47';
+    equity4 < 0 ? total4.style.background = '#FF5964' : total4.style.background = '#FFFF47';
 
     total1.innerHTML = equity1.toLocaleString("en-US", { style: "currency", currency: "USD" });
     total2.innerHTML = equity2.toLocaleString("en-US", { style: "currency", currency: "USD" });
     total3.innerHTML = equity3.toLocaleString("en-US", { style: "currency", currency: "USD" });
-    document.getElementById("total-54").innerHTML = equityTotal.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    total4.innerHTML = equity4.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    document.getElementById("total-55").innerHTML = equityTotal.toLocaleString("en-US", { style: "currency", currency: "USD" });
 };
 
 // Update proxyObject when function called, in addition to the input change event.  Necessary when other input values change, which 
@@ -668,7 +729,7 @@ function chapter7Fees() {
         }
         document.getElementById("total-15" + i).innerHTML = feesSubTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
         document.getElementById("total-19" + i).innerHTML = feesSubTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
-        document.getElementById("total-154").innerHTML = feesTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-155").innerHTML = feesTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
     }
 };
 
@@ -698,9 +759,9 @@ function costOfSale() {
         document.getElementById("total-22" + i).innerHTML = netEquity.toLocaleString("en-US", {style: "currency",currency: "USD"});
         document.getElementById("total-24" + i).innerHTML = debtorEquity.toLocaleString("en-US", {style: "currency",currency: "USD"});
         document.getElementById("total-25" + i).innerHTML = exemptions.toLocaleString("en-US", {style: "currency",currency: "USD"});
-        document.getElementById("total-244").innerHTML = debtorEquityTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
-        document.getElementById("total-254").innerHTML = exemptionTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
-        document.getElementById("total-264").innerHTML = Math.max(0, distributionUnsecureds).toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-245").innerHTML = debtorEquityTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-255").innerHTML = exemptionTotal.toLocaleString("en-US", {style: "currency",currency: "USD"});
+        document.getElementById("total-265").innerHTML = Math.max(0, distributionUnsecureds).toLocaleString("en-US", {style: "currency",currency: "USD"});
         
     }
 };
@@ -729,7 +790,7 @@ function generatePDF() {
         scrollY: -window.scrollY,
         scale:2}).then(function(canvas){
             var date = new Date();
-            var longDate = date.toLocaleDateString('en-US',{weekday:"long",year:"numeric",month:"short",day:"numeric"});
+            var longDate = date.toLocaleDateString('en-US',{year:"numeric",month:"long",day:"numeric"});
             var localTime = date.toLocaleTimeString();
             var img = canvas.toDataURL("image/jpeg", 1);
             var doc = new jsPDF("p", "pt", [w, h]);
