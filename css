@@ -1,31 +1,155 @@
-.tblb {
-	display: table;
-	width: 100%;
-	border-collapse: collapse;
-	table-layout: fixed;
-}
+    :root {
+        --font-family-body: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        --font-size-body: 1.167em;
+        --font-leading-body: 1.6;
+        --color-cell-primary: #FFFF47;
+        --color-cell-secondary:#E8ECF1;
+        --color-text-primary: #121733;
+        --color-text-secondary:#6F8697;
+        --color-text-tertiary: #FFFFFF;
+        --color-accent-primary:#5F4BB6;
+        --color-accent-secondary:#7F6FC5;
+        --color-warn-primary: #F5414F;
+        --color-warn-secondary: #FF5964;
+        --color-border-primary: #DEE2E6;
+        --color-border-secondary:#CED4DA;
+        --color-border-tertiary: #6E7381;
+    }
 
-.tblb-row {
-	display: table-row;
-	padding: 0;
-}
+    html {
+        box-sizing: border-box;
+    }
 
-.tblb-cell, .tblb-head {
-	display: table-cell;
-	padding: .3rem;
-	border-top: 1px solid #dee2e6;
-	font-family: var(--font-family-body);
-	line-height: 1.6;
-	line-height: var(--font-leading-body);
-	color: #121733;
-	font-weight: 400;
-	text-align: left;
-}
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
 
-.tblb-cell > input{
-	width:100%;
-	border: 1px solid #ced4da;
-  	border-radius: .25rem;
-	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    	transition-delay: 0s, 0s;
-}
+    body {
+        font-size: var(--font-size-body);
+    }
+
+    .main-content {
+        width:1400px;
+        margin:auto;
+        margin-top:20px;
+        border:1px solid var(--color-border-primary);
+        background:#FFFFFF;
+    }
+
+    .tblb {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .tblb-row {
+        display: table-row;
+        padding: 0;
+    }
+
+    .tblb-cell, .tblb-head {
+        display: table-cell;
+        padding: .3rem;
+        border-top: 1px solid var(--color-border-primary);
+        font-family: var(--font-family-body);
+        line-height: var(--font-leading-body);
+        color: var(--color-text-primary);
+        font-weight: 400;
+        text-align: left;
+    }
+
+    .tblb-cell-title {
+        text-align:center;
+        background: var(--color-accent-primary);
+        color: var(--color-text-tertiary) !important;
+        border-top: none !important;
+    }
+
+    .tblb-cell-head {
+        text-align:center;
+        background-color: var(--color-cell-secondary);
+    }
+
+    .tblb-cell-description {
+        width:400px;
+    }
+
+    .tblb-cell-indent {
+        padding-left: 25px;
+    }
+
+    .span-fees-description {
+        color: var(--color-text-secondary);
+        font-size:.75em;
+    }
+
+    .tblb-cell-total {
+        background-color: var(--color-cell-primary);
+    }
+
+    .tblb-cell-total-negative {
+        background-color: var(--color-warn-secondary);
+    }
+
+    .tblb-cell-total-bold {
+        background-color: var(--color-cell-primary);
+        font-weight:bold;
+    }
+
+    .tblb-cell > input {
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        transition-delay: 0s, 0s;
+    }
+
+    input[type="text"]:focus {
+        border: 1px solid var(--color-border-tertiary);
+    }
+
+    .select-percentage-cos, input {
+        width:100%;
+        font-size: 1em;
+        border: 1px solid var(--color-border-secondary);
+        border-radius: .25rem;
+        padding: 3px;
+        font-family: var(--font-family-body);
+        line-height: var(--font-leading-body);
+        font-weight: 400;
+    }
+
+    .button-pdf, .button-reset {
+        color: var(--color-text-tertiary);
+        width:150px;
+        padding: 0.75rem 0.75rem;
+        font-size: 0.7em;
+        line-height: var(--font-leading-body);
+        letter-spacing: 0.125em;
+        border-radius: 3px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .button-content {
+        width:1400px;
+        margin:auto;
+        margin-top:20px;
+    }
+
+    .button-pdf {
+        background: var(--color-accent-primary);
+    }
+
+    .button-pdf:hover {
+        background:var(--color-accent-secondary);
+    }
+
+    .button-reset {
+        background: var(--color-warn-primary);
+        margin-right: .3rem;
+    }
+
+    .button-reset:hover {
+        background:var(--color-warn-secondary);
+    }
