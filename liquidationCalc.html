@@ -1,0 +1,1021 @@
+<!--##########################################################################################
+// Created by the office of Jason Wilson-Aguilar.
+//############################################################################################-->
+<!DOCTYPE html>
+<html lang="en">
+<title>Liquidation Calculator</title>
+<head content-type="utf-8">
+<meta charset="utf-8">
+<style>
+    :root {
+        --font-family-body: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        --font-leading-body: 1.6;
+        --color-cell-primary: #FFFF47;
+        --color-cell-secondary:#E8ECF1;
+        --color-text-primary: #121733;
+        --color-text-secondary:#6F8697;
+        --color-text-tertiary: #FFFFFF;
+        --color-accent-primary:#5F4BB6;
+        --color-accent-secondary:#7F6FC5;
+        --color-warn-primary: #F5414F;
+        --color-warn-secondary: #FF5964;
+        --color-border-primary: #DEE2E6;
+        --color-border-secondary:#CED4DA;
+        --color-border-tertiary: #6E7381;
+    }
+
+    html {
+        box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+    body {
+        font-size: 1.167em;
+    }
+
+    .main-content {
+        width:1400px;
+        margin:auto;
+        margin-top:20px;
+        border:1px solid var(--color-border-primary);
+        background:#FFFFFF;
+    }
+
+    .tblb {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .tblb-row {
+        display: table-row;
+        padding: 0;
+    }
+
+    .tblb-cell, .tblb-head {
+        display: table-cell;
+        padding: .3rem;
+        border-top: 1px solid var(--color-border-primary);
+        font-family: var(--font-family-body);
+        line-height: var(--font-leading-body);
+        color: var(--color-text-primary);
+        font-weight: 400;
+        text-align: left;
+    }
+
+    .tblb-cell-title {
+        text-align:center;
+        background: var(--color-accent-primary);
+        color: var(--color-text-tertiary) !important;
+        border-top: none !important;
+    }
+
+    .tblb-cell-head {
+        text-align:center;
+        background-color: var(--color-cell-secondary);
+    }
+
+    .tblb-cell-description {
+        width:400px;
+    }
+
+    .tblb-cell-indent-left {
+        padding-left: 25px;
+    }
+
+    .tblb-cell-indent-right {
+        text-align:right !important;
+        padding-right: 10px;
+    }
+
+    .span-fees-description {
+        color: var(--color-text-secondary);
+        font-size:.75em;
+    }
+
+    .tblb-cell-total {
+        background-color: var(--color-cell-primary);
+    }
+
+    .tblb-cell-total-negative {
+        background-color: var(--color-warn-secondary);
+    }
+
+    .tblb-cell-total-bold {
+        background-color: var(--color-cell-primary);
+        font-weight:bold;
+    }
+
+    .tblb-cell > input {
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        transition-delay: 0s, 0s;
+    }
+
+    input[type="text"]:focus {
+        border: 1px solid var(--color-border-tertiary);
+    }
+
+    .select-percentage-cos, input {
+        width:100%;
+        font-size: 1em;
+        border: 1px solid var(--color-border-secondary);
+        border-radius: .25rem;
+        padding: 3px;
+        font-family: var(--font-family-body);
+        line-height: var(--font-leading-body);
+        font-weight: 400;
+    }
+
+    .button-pdf, .button-reset {
+        color: var(--color-text-tertiary);
+        width:150px;
+        padding: 0.75rem 0.75rem;
+        font-size: 0.7em;
+        line-height: var(--font-leading-body);
+        letter-spacing: 0.125em;
+        border-radius: 3px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .button-content {
+        width:1400px;
+        margin:auto;
+        margin-top:20px;
+    }
+
+    .button-pdf {
+        background: var(--color-accent-primary);
+    }
+
+    .button-pdf:hover {
+        background:var(--color-accent-secondary);
+    }
+
+    .button-reset {
+        background: var(--color-warn-primary);
+        margin-right: .3rem;
+    }
+
+    .button-reset:hover {
+        background:var(--color-warn-secondary);
+    }
+
+    .tooltip-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+        cursor: default;
+    }
+
+    .tooltip-icon {
+        color: var(--color-accent-primary);
+        font-size: 0.85em;
+        font-weight: bold;
+        user-select: none;
+    }
+
+    .tooltip-box {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        position: absolute;
+        z-index: 100;
+        bottom: 130%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-text-primary);
+        color: var(--color-text-tertiary);
+        font-family: var(--font-family-body);
+        font-size: 0.78em;
+        text-align:right;
+        line-height: 1.6;
+        padding: 8px 12px;
+        border-radius: 5px;
+        white-space: nowrap;
+        pointer-events: none;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    }
+
+    .tooltip-box::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: var(--color-text-primary);
+    }
+
+    .tooltip-wrapper:hover .tooltip-box {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .tooltip-table {
+        border-collapse: collapse;
+    }
+
+    .tooltip-table .tip-left {
+        text-align: left;
+        padding-right: 6px;
+    }
+
+    .tooltip-table .tip-right {
+        text-align: right;
+    }
+
+</style>
+</head>
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<form id="form-liquidation">
+    <div id="main-content-container" class="main-content">
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-title"><strong>Liquidation Calculator</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Case Number:</div>
+                <div class="tblb-cell"><input id="input-11" type="text" name="CaseNumber" autofocus="" tabindex="11" aria-label="Case Number"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Type of Asset:</div>
+                <div class="tblb-cell"><input id="input-21" type="text" name="AssetDescription" tabindex="12" aria-label="Asset Description"></div>
+                <div class="tblb-cell"><input id="input-22" type="text" name="AssetDescription" tabindex="19" aria-label="Asset Description"></div>
+                <div class="tblb-cell"><input id="input-23" type="text" name="AssetDescription" tabindex="26" aria-label="Asset Description"></div>
+                <div class="tblb-cell"><input id="input-24" type="text" name="AssetDescription" tabindex="33" aria-label="Asset Description"></div>
+                <div class="tblb-cell"><input id="input-25" type="text" name="AssetDescription" tabindex="40" aria-label="Asset Description"></div>
+                <div class="tblb-cell tblb-cell-indent-right"><strong>TOTALS</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-head"><strong>Determination of Non-Exempt Equity</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Full Fair Market Value of Asset:</div>
+                <div class="tblb-cell"><input id="input-31" class="money-format" type="text" name="AssetValue" tabindex="13" aria-label="Value of Asset"></div>
+                <div class="tblb-cell"><input id="input-32" class="money-format" type="text" name="AssetValue" tabindex="20" aria-label="Value of Asset"></div>
+                <div class="tblb-cell"><input id="input-33" class="money-format" type="text" name="AssetValue" tabindex="27" aria-label="Value of Asset"></div>
+                <div class="tblb-cell"><input id="input-34" class="money-format" type="text" name="AssetValue" tabindex="34" aria-label="Value of Asset"></div>
+                <div class="tblb-cell"><input id="input-35" class="money-format" type="text" name="AssetValue" tabindex="41" aria-label="Value of Asset"></div>
+                <div class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right" id="total-36">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Liens:</div>
+                <div class="tblb-cell"><input id="input-41" class="money-format" type="text" name="Liens" tabindex="14" aria-label="Amount of Liens"></div>
+                <div class="tblb-cell"><input id="input-42" class="money-format" type="text" name="Liens" tabindex="21" aria-label="Amount of Liens"></div>
+                <div class="tblb-cell"><input id="input-43" class="money-format" type="text" name="Liens" tabindex="28" aria-label="Amount of Liens"></div>
+                <div class="tblb-cell"><input id="input-44" class="money-format" type="text" name="Liens" tabindex="35" aria-label="Amount of Liens"></div>
+                <div class="tblb-cell"><input id="input-45" class="money-format" type="text" name="Liens" tabindex="42" aria-label="Amount of Liens"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Debtor's Equity:</strong></div>
+                <div id="total-51" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-52" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-53" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-54" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-55" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right" id="total-56">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-head"><strong>Determination of Exemptions</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Type of Exemption:</div>
+                <div class="tblb-cell"><input id="input-61" type="text" name="ExemptionDescription" tabindex="15" aria-label="Exemption Description"></div>
+                <div class="tblb-cell"><input id="input-62" type="text" name="ExemptionDescription" tabindex="22" aria-label="Exemption Description"></div>
+                <div class="tblb-cell"><input id="input-63" type="text" name="ExemptionDescription" tabindex="29" aria-label="Exemption Description"></div>
+                <div class="tblb-cell"><input id="input-64" type="text" name="ExemptionDescription" tabindex="36" aria-label="Exemption Description"></div>
+                <div class="tblb-cell"><input id="input-65" type="text" name="ExemptionDescription" tabindex="43" aria-label="Exemption Description"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Amount of Exemption:</div>
+                <div class="tblb-cell"><input id="input-71" class="money-format" type="text" name="ExemptionAmount" tabindex="16" aria-label="Amount of Exemption"></div>
+                <div class="tblb-cell"><input id="input-72" class="money-format" type="text" name="ExemptionAmount" tabindex="23" aria-label="Amount of Exemption"></div>
+                <div class="tblb-cell"><input id="input-73" class="money-format" type="text" name="ExemptionAmount" tabindex="30" aria-label="Amount of Exemption"></div>
+                <div class="tblb-cell"><input id="input-74" class="money-format" type="text" name="ExemptionAmount" tabindex="37" aria-label="Amount of Exemption"></div>
+                <div class="tblb-cell"><input id="input-75" class="money-format" type="text" name="ExemptionAmount" tabindex="44" aria-label="Amount of Exemption"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Wildcard Exemption Used:</div>
+                <div class="tblb-cell"><input id="input-81" class="money-format" type="text" name="WildcardAmount" tabindex="17" aria-label="Wildcard Exemption"></div>
+                <div class="tblb-cell"><input id="input-82" class="money-format" type="text" name="WildcardAmount" tabindex="24" aria-label="Wildcard Exemption"></div>
+                <div class="tblb-cell"><input id="input-83" class="money-format" type="text" name="WildcardAmount" tabindex="31" aria-label="Wildcard Exemption"></div>
+                <div class="tblb-cell"><input id="input-84" class="money-format" type="text" name="WildcardAmount" tabindex="38" aria-label="Wildcard Exemption"></div>
+                <div class="tblb-cell"><input id="input-85" class="money-format" type="text" name="WildcardAmount" tabindex="45" aria-label="Wildcard Exemption"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Total Exemptions Claimed:</strong></div>
+                <div id="total-91" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-92" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-93" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-94" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-95" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-head"><strong>Hypothetical Administrative Costs of Chapter 7 Trustee</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Disbursement Amount:<br><span class="span-fees-description">Debtor's share of proceeds from sale minus exemptions</span></div>
+                <div id="total-101" class="tblb-cell tblb-cell-total"><span id="disburse-val-1">$0.00</span><span id="tooltip-1" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-1" class="tooltip-box"></span></span></div>
+                <div id="total-102" class="tblb-cell tblb-cell-total"><span id="disburse-val-2">$0.00</span><span id="tooltip-2" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-2" class="tooltip-box"></span></span></div>
+                <div id="total-103" class="tblb-cell tblb-cell-total"><span id="disburse-val-3">$0.00</span><span id="tooltip-3" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-3" class="tooltip-box"></span></span></div>
+                <div id="total-104" class="tblb-cell tblb-cell-total"><span id="disburse-val-4">$0.00</span><span id="tooltip-4" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-4" class="tooltip-box"></span></span></div>
+                <div id="total-105" class="tblb-cell tblb-cell-total"><span id="disburse-val-5">$0.00</span><span id="tooltip-5" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-5" class="tooltip-box"></span></span></div>
+                <div id="total-106" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">First $5,000:<br><span class="span-fees-description">25% of Disbursement</span></div>
+                <div id="total-111" class="tblb-cell"></div>
+                <div id="total-112" class="tblb-cell"></div>
+                <div id="total-113" class="tblb-cell"></div>
+                <div id="total-114" class="tblb-cell"></div>
+                <div id="total-115" class="tblb-cell"></div>
+                <div id="total-116" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Between $5,000 &amp; $50,000:<br><span class="span-fees-description">10% of Disbursement</span></div>
+                <div id="total-121" class="tblb-cell"></div>
+                <div id="total-122" class="tblb-cell"></div>
+                <div id="total-123" class="tblb-cell"></div>
+                <div id="total-124" class="tblb-cell"></div>
+                <div id="total-125" class="tblb-cell"></div>
+                <div id="total-126" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Between $50,000 &amp; $1,000,000:<br><span class="span-fees-description">5% of Disbursement</span></div>
+                <div id="total-131" class="tblb-cell"></div>
+                <div id="total-132" class="tblb-cell"></div>
+                <div id="total-133" class="tblb-cell"></div>
+                <div id="total-134" class="tblb-cell"></div>
+                <div id="total-135" class="tblb-cell"></div>
+                <div id="total-136" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Greater Than $1,000,000:<br><span class="span-fees-description">3% of Disbursement</span></div>
+                <div id="total-141" class="tblb-cell"></div>
+                <div id="total-142" class="tblb-cell"></div>
+                <div id="total-143" class="tblb-cell"></div>
+                <div id="total-144" class="tblb-cell"></div>
+                <div id="total-145" class="tblb-cell"></div>
+                <div id="total-146" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Total Hypothetical Chapter 7 Trustee Fees:</strong></div>
+                <div id="total-151" class="tblb-cell"></div>
+                <div id="total-152" class="tblb-cell"></div>
+                <div id="total-153" class="tblb-cell"></div>
+                <div id="total-154" class="tblb-cell"></div>
+                <div id="total-155" class="tblb-cell"></div>
+                <div class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right" id="total-156">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-head"><strong>Final Determination of Values</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Full Fair Market Value of Asset:</strong></div>
+                <div id="total-161" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-162" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-163" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-164" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-165" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description tblb-cell-indent-left">Percentage Cost of Sale:</div>
+                <div class="tblb-cell">
+                    <select id="select-171" class="select-percentage-cos" name="PercentageCOS" aria-label="Percentage Cost of Sale">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select id="select-172" class="select-percentage-cos" name="PercentageCOS" aria-label="Percentage Cost of Sale">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select id="select-173" class="select-percentage-cos" name="PercentageCOS" aria-label="Percentage Cost of Sale">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select id="select-174" class="select-percentage-cos" name="PercentageCOS" aria-label="Percentage Cost of Sale">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell">
+                    <select id="select-175" class="select-percentage-cos" name="PercentageCOS" aria-label="Percentage Cost of Sale">
+                        <optgroup label="Property">
+                            <option value="0.09">9.00%</option>
+                        </optgroup>
+                        <optgroup label="Cash Asset">
+                            <option value="0">0.00%</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description tblb-cell-indent-left">Hypothetical Cost of Sale:</div>
+                <div id="total-181" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-182" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-183" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-184" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-185" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Hypothetical Proceeds from Sale:</strong></div>
+                <div id="total-191" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-192" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-193" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-194" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-195" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description tblb-cell-indent-left">Liens:</div>
+                <div id="total-201" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-202" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-203" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-204" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-205" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Subtotal:</strong></div>
+                <div id="total-211" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-212" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-213" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-214" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-215" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description tblb-cell-indent-left">Percentage of Ownership:</div>
+                <div class="tblb-cell"><input id="input-221" class="percent-format" type="text" name="PercentageOwnership" value="100.00%" tabindex="18"></div>
+                <div class="tblb-cell"><input id="input-222" class="percent-format" type="text" name="PercentageOwnership" value="100.00%" tabindex="25"></div>
+                <div class="tblb-cell"><input id="input-223" class="percent-format" type="text" name="PercentageOwnership" value="100.00%" tabindex="32"></div>
+                <div class="tblb-cell"><input id="input-224" class="percent-format" type="text" name="PercentageOwnership" value="100.00%" tabindex="39"></div>
+                <div class="tblb-cell"><input id="input-225" class="percent-format" type="text" name="PercentageOwnership" value="100.00%" tabindex="46"></div>
+                <div class="tblb-cell"></div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Total Equity:</strong></div>
+                <div id="total-231" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-232" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-233" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-234" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-235" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right" id="total-236">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Total Exemptions Used:</strong></div>
+                <div id="total-241" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-242" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-243" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-244" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-245" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-246" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Chapter 7 Trustee Fees:</strong></div>
+                <div id="total-251" class="tblb-cell"></div>
+                <div id="total-252" class="tblb-cell"></div>
+                <div id="total-253" class="tblb-cell"></div>
+                <div id="total-254" class="tblb-cell"></div>
+                <div id="total-255" class="tblb-cell"></div>
+                <div id="total-256" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-head"><strong>Minimum Distribution to Priority and General Unsecured Claims to Protect Non-Exempt Equity</strong></div>
+            </div>
+        </div>
+        <div class="tblb">
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description">Minimum Distribution to all Unsecured Claims:</div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div class="tblb-cell"></div>
+                <div id="total-266" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
+            </div>
+        </div>
+    </div>
+    <div class="button-content">
+        <button id="btn-reset" class="button-reset" type="button" onclick="calcReset()">Reset</button>
+        <button id="btn-pdf" class="button-pdf" type="button" onclick="calcPDF()">Save PDF</button>
+    </div>
+</form>
+
+<script>
+const CURRENCY_FORMAT = { style: "currency", currency: "USD" };
+const TIER_LIMITS = [5000, 50000, 1000000];
+const TIER_PERCENTAGES = [0.25, 0.10, 0.05, 0.03];
+
+// function formating money.
+const fmt = (n) => n.toLocaleString("en-US", CURRENCY_FORMAT);
+
+// Function returning a new asset with default values.
+const createAsset = () => ({
+    description: '',
+    fairMarketValue: 0,
+    percentageOwnership: 100,
+    liens: 0,
+    exemption: 0,
+    wildcardExemption: 0,
+    percentageCOS: 0.09,
+    get equity() {
+        return this.fairMarketValue - this.liens;
+    },
+    get costOfSale() {
+        return this.fairMarketValue * this.percentageCOS;
+    }
+});
+
+// Initialize liquidationObject with five empty assets.
+const liquidationObject = {
+    feesTotal: 0,
+    asset: {
+        '1': createAsset(),
+        '2': createAsset(),
+        '3': createAsset(),
+        '4': createAsset(),
+        '5': createAsset()
+    }
+};
+
+// Resets all asset values in liquidationObject back to their defaults.
+function resetLiquidationValues() {
+    const len = Object.keys(liquidationObject.asset).length;
+    const excludedProps = new Set(['equity', 'costOfSale']); // Getters — skip, not writable
+
+    for (let i = 1; i <= len; i++) {
+        for (let prop in liquidationObject.asset[i]) {
+            if (!excludedProps.has(prop)) {
+                if (prop == 'percentageOwnership') {
+                    liquidationObject.asset[i][prop] = 100;  // Default 100%
+                } else if (prop == 'percentageCOS') {
+                    liquidationObject.asset[i][prop] = 0.09; // Default 9%
+                } else if (prop == 'description') {
+                    liquidationObject.asset[i][prop] = ''; // Default blank
+                } else {
+                    liquidationObject.asset[i][prop] = 0;    // All other properties reset to 0
+                }
+            }
+        }
+    }
+}
+
+// Initialize buttons.
+const calcReset = (event) => {
+    document.getElementById('form-liquidation').reset();
+    resetLiquidationValues();
+    calc.all();
+    window.scrollTo({top: 0,left: 0,behavior: 'smooth'});
+};
+
+const calcPDF = (event) => {
+    generatePDF();
+};
+
+// Format inputs.
+const money = document.querySelectorAll(".money-format");
+money.forEach(function(input) {
+    input.addEventListener("change", () => {
+        moneyFormat(input);
+    }); 
+});
+
+const percent = document.querySelectorAll(".percent-format");
+percent.forEach(function(input) {
+    input.addEventListener("change", () => {
+        percentFormat(input);
+    }); 
+});
+
+// Replace negative numbers with zero. Replace non-numeric values with blank.
+function moneyFormat(inputValue) {
+    const min = 0;
+    const num = parseFloat(inputValue.value.replace(/[%,]+/g, ""));
+    if (!isNaN(parseFloat(num))) {
+        if (num < min) {
+            inputValue.value = fmt(min);
+        }else {
+            inputValue.value = fmt(num);
+        }
+    }else {
+        inputValue.value = "";
+    }
+};
+
+// Maximum percent allowed is 100. Replace non-numeric values with blank.
+function percentFormat(inputValue) {
+    const min = 0;
+    const max = 100;
+    let num = parseFloat(inputValue.value.replace(/[%,]+/g, ""));
+    num = Math.min(Math.max(num, min), max);
+    
+    const formatted = (!isNaN(num) ? num : max).toFixed(2) + "%";
+    
+    inputValue.value = formatted; // Updates the input box
+    return formatted;             // Returns the string for use elsewhere
+}
+
+// Remove formating from inputs when performing calculations.
+function removeFormat(inputValue){
+    return Number(inputValue.replace(/[^0-9.-]+/g, ""));
+};
+
+// Input change listeners.
+// Each listener extracts the asset index from the input's id, updates the corresponding property in liquidationObject, then recalculates all values.
+// Asset type description inputs.
+const assetTypeInput = document.querySelectorAll("#input-21,#input-22,#input-23,#input-24,#input-25");
+assetTypeInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        const id = this.id;
+        const asset = id.charAt(id.length - 1);
+        const val = this.value;
+        liquidationObject.asset[asset].description = val;
+        calc.all();
+    });
+});
+
+// Fair market value inputs.
+const fairMarketInput = document.querySelectorAll("#input-31,#input-32,#input-33,#input-34,#input-35");
+fairMarketInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        const id = this.id;
+        const asset = id.charAt(id.length - 1); // Last character of id is the asset index
+        const val = this.value;
+        liquidationObject.asset[asset].fairMarketValue = parseFloat(removeFormat(val));
+        calc.all();
+    });
+});
+
+// Cost of sale percentage dropdowns
+const percentageCOSInput = document.querySelectorAll("#select-171,#select-172,#select-173,#select-174,#select-175");
+percentageCOSInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        const id = this.id;
+        const asset = id.charAt(id.length - 1);
+        const val = this.value;
+        liquidationObject.asset[asset].percentageCOS = parseFloat(removeFormat(val));
+        calc.all();
+    });
+});
+
+// Percentage of ownership inputs.
+const percentageOwnInput = document.querySelectorAll("#input-221,#input-222,#input-223,#input-224,#input-225");
+percentageOwnInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        const id = this.id;
+        const asset = id.charAt(id.length - 1);
+        const val = this.value;
+        liquidationObject.asset[asset].percentageOwnership = parseFloat(removeFormat(val));
+        calc.all();
+    });
+});
+
+// Liens inputs.
+const liensInput = document.querySelectorAll("#input-41,#input-42,#input-43,#input-44,#input-45");
+liensInput.forEach(function(input) {
+    input.addEventListener("change", function() {
+        const id = this.id;
+        const asset = id.charAt(id.length -1 );
+        const val = this.value;
+        liquidationObject.asset[asset].liens = parseFloat(removeFormat(val));
+        calc.all();
+    });
+});
+
+// Exemption inputs - only stored when equity is zero or positive.
+const exemptionInput = document.querySelectorAll("#input-71,#input-72,#input-73,#input-74,#input-75");
+exemptionInput.forEach(function(input) {
+    input.addEventListener("change", function(){
+        const id = this.id;
+        const asset = id.charAt(id.length - 1);
+        const val = this.value;
+        if(liquidationObject.asset[asset].equity >= 0){
+            liquidationObject.asset[asset].exemption = parseFloat(removeFormat(val));
+        }
+        calc.all();
+    });
+});
+
+// Wildcard exemption inputs - only stored when equity is zero or positive.
+const wildcardInput = document.querySelectorAll("#input-81,#input-82,#input-83,#input-84,#input-85");
+wildcardInput.forEach(function(input) {
+    input.addEventListener("change", function(){
+        const id = this.id;
+        const asset = id.charAt(id.length - 1);
+        const val = this.value;
+        if(liquidationObject.asset[asset].equity >= 0){
+            liquidationObject.asset[asset].wildcardExemption = parseFloat(removeFormat(val));
+        }
+        calc.all();
+    });
+});
+
+// Calculate Values.
+const calc = {
+    // Sum of fair market values across all assets (column 6 total).
+    fairMarketSum() {
+        const { asset } = liquidationObject;
+        const sum = Object.values(asset).reduce(getSum, 0);
+        function getSum(total, asset) {
+            return total + asset.fairMarketValue;
+        }
+        document.getElementById("total-36").innerHTML = fmt(sum);
+    },
+    // Display each asset's fair market value in the Final Determination section.
+    debtorFMV() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+        for (let i = 1; i <= len; i++) {
+            document.getElementById("total-16" + i).innerHTML = fmt(asset[i].fairMarketValue);
+        }
+    },
+    // Display each asset's lien amount in the Final Determination section.
+    liens() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+        for (let i = 1; i <= len; i++) {
+            document.getElementById("total-20" + i).innerHTML = fmt(asset[i].liens);
+        }
+    },
+    // Calculate and display debtor equity per asset (FMV minus liens).
+    debtorEquity() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+        const sum = Object.values(asset).reduce(getSum, 0);
+        function getSum(total, asset) {
+            return total + Math.max(0,asset.equity); // Ignore negative equity in equityTotal calculation. 
+        }
+        // Highlight cell red when equity is negative.
+        for (let i = 1; i <= len; i++) {
+            const total = document.getElementById("total-5" + i);
+            asset[i].equity < 0 ? total.classList.replace("tblb-cell-total", "tblb-cell-total-negative") : total.classList.replace("tblb-cell-total-negative", "tblb-cell-total");
+            total.innerHTML = fmt(asset[i].equity);
+        }
+        // Update total equity
+        document.getElementById("total-56").innerHTML = fmt(sum);
+    },
+    // Calculate total exemptions claimed per asset, capped at available equity.
+    exemptionsSum() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+        for (let i = 1; i <= len; i++) {
+            const exemptionInput = document.getElementById("input-7" + i);
+            const wildcardInput = document.getElementById("input-8" + i);
+            // Update liquidationObject when function called, in addition to the input change event. 
+            asset[i].exemption = parseFloat(removeFormat(exemptionInput.value));
+            asset[i].wildcardExemption = parseFloat(removeFormat(wildcardInput.value));
+            const equity = Math.max(0, asset[i].equity);
+            const exemptionSum = Math.min(equity, (asset[i].exemption + asset[i].wildcardExemption));
+            document.getElementById("total-9" + i).innerHTML = fmt(exemptionSum);
+        };
+    },
+    // Calculate hypothetical Chapter 7 trustee fees using the statutory tiered fee schedule.
+    chapter7Fees() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+
+        // Step 1: per-asset disbursement amounts.
+        const perAssetDisbursement = {};
+        const perAssetMeta = {};  // Store intermediate values for tooltips.
+
+        for (let i = 1; i <= len; i++) {
+            const ownership  = asset[i].percentageOwnership / 100;
+            const equity     = Math.max(0, asset[i].equity);
+            const exemptions = Math.min(equity, (asset[i].exemption + asset[i].wildcardExemption));
+            const fmv        = asset[i].fairMarketValue;
+            const cos        = fmv * asset[i].percentageCOS;
+            const proceeds   = fmv - cos;
+            const liens      = asset[i].liens;
+            const subtotal   = Math.max(0, fmv - cos - liens);
+            const netAfterExemptions = (subtotal * ownership) - exemptions;
+
+            const disbursement = (netAfterExemptions > 0)
+                ? Math.max(0, (proceeds * ownership) - exemptions)
+                : 0;
+
+            perAssetDisbursement[i] = disbursement;
+            perAssetMeta[i] = { proceeds, ownership, exemptions, disbursement };
+        }
+
+        // Step 2: total disbursement across all assets.
+        const totalDisbursement = Object.values(perAssetDisbursement).reduce((s, v) => s + v, 0);
+
+        // Step 3: clear summary tier cells only. Note: total-101 through total-105 are managed in Step 6 (they contain tooltip markup).
+        ["106", "116", "126", "136", "146", "156"].forEach(id => {
+            document.getElementById("total-" + id).innerHTML = '$0.00';
+        });
+
+        // Step 4: tiered fee calculation on combined disbursement.
+        let feesTotal = 0;
+        let tier1 = 0, tier2 = 0, tier3 = 0, tier4 = 0;
+
+        if (totalDisbursement > 0) {
+            if (totalDisbursement <= TIER_LIMITS[0]) {
+                tier1 = totalDisbursement * TIER_PERCENTAGES[0];
+            } else if (totalDisbursement <= TIER_LIMITS[1]) {
+                tier1 = TIER_PERCENTAGES[0] * TIER_LIMITS[0];
+                tier2 = TIER_PERCENTAGES[1] * (totalDisbursement - TIER_LIMITS[0]);
+            } else if (totalDisbursement <= TIER_LIMITS[2]) {
+                tier1 = TIER_PERCENTAGES[0] * TIER_LIMITS[0];
+                tier2 = TIER_PERCENTAGES[1] * (TIER_LIMITS[1] - TIER_LIMITS[0]);
+                tier3 = TIER_PERCENTAGES[2] * (totalDisbursement - TIER_LIMITS[1]);
+            } else {
+                tier1 = TIER_PERCENTAGES[0] * TIER_LIMITS[0];
+                tier2 = TIER_PERCENTAGES[1] * (TIER_LIMITS[1] - TIER_LIMITS[0]);
+                tier3 = TIER_PERCENTAGES[2] * (TIER_LIMITS[2] - TIER_LIMITS[1]);
+                tier4 = TIER_PERCENTAGES[3] * (totalDisbursement - TIER_LIMITS[2]);
+            }
+            feesTotal = tier1 + tier2 + tier3 + tier4;
+        }
+        liquidationObject.feesTotal = feesTotal;
+
+        // Step 5: populate summary (column 6) cells.
+        document.getElementById("total-106").innerHTML = fmt(totalDisbursement);
+        if (tier1 > 0) document.getElementById("total-116").innerHTML = fmt(tier1);
+        if (tier2 > 0) document.getElementById("total-126").innerHTML = fmt(tier2);
+        if (tier3 > 0) document.getElementById("total-136").innerHTML = fmt(tier3);
+        if (tier4 > 0) document.getElementById("total-146").innerHTML = fmt(tier4);
+        document.getElementById("total-156").innerHTML = fmt(feesTotal);
+        document.getElementById("total-256").innerHTML = fmt(feesTotal);
+
+        // Step 6: update disbursement values and tooltips. Note: total-101 through total-105 host tooltip markup — update only the child spans.
+        for (let i = 1; i <= len; i++) {
+            const valSpan    = document.getElementById("disburse-val-" + i);
+            const tipWrapper = document.getElementById("tooltip-" + i);
+            const tipText    = document.getElementById("tooltip-text-" + i);
+            const { proceeds, ownership, exemptions, disbursement } = perAssetMeta[i];
+
+            if (disbursement > 0) {
+                valSpan.innerHTML = fmt(disbursement);
+                tipWrapper.style.display = "inline-block";
+
+                const ownerPct = (ownership * 100).toFixed(2) + "%";
+                const proceedsTimesOwnership = proceeds * ownership;
+
+                tipText.innerHTML =
+                    "<table class='tooltip-table'>" + 
+                        "<tr>" + 
+                            "<td class='tip-right'>"  + "(Sale Proceeds &times; Ownership%) &minus; " + "</td>" +
+                            "<td class='tip-right'>"  + "Exemptions = " + "</td>" + 
+                            "<td class='tip-left'>" + "Disbursement Amount" + "</td>" + 
+                        "</tr>" + 
+                        "<tr>" + 
+                            "<td class='tip-right'>"  + "(" + fmt(proceeds) + " &times; " + ownerPct + ") &minus; " + "</td>" + 
+                            "<td class='tip-right'>"  + fmt(exemptions) + " = " + "</td>" + 
+                            "<td class='tip-left'>" + fmt(disbursement) + "</td>" + 
+                        "</tr>" + 
+                    "</table>";
+            } else {
+                valSpan.innerHTML = fmt(0);
+                tipWrapper.style.display = "none";
+            }
+        }
+    },
+    // Calculate hypothetical sale proceeds, equity, and minimum distribution to unsecured creditors.
+    costOfSale() {
+        const { asset } = liquidationObject;
+        const len = Object.keys(asset).length;
+        const feesTotal = liquidationObject.feesTotal;
+        let exemptionTotal = 0;
+        let equityTotal = 0;
+        let distributionUnsecureds = 0;
+
+        // Per-asset calculations for the Final Determination of Values section.
+        for (let i = 1; i <= len; i++) {
+            const ownership = asset[i].percentageOwnership / 100;
+            const fmv  = asset[i].fairMarketValue;
+            const cos  = asset[i].fairMarketValue * asset[i].percentageCOS;
+            const liens = asset[i].liens;
+            const subtotal = Math.max(0, fmv - cos - liens);
+            const equity = Math.max(0, subtotal * ownership);
+            const saleProceeds = Math.max(0, fmv - cos);
+            const exemptions = Math.min(equity, (asset[i].exemption + asset[i].wildcardExemption));
+
+            exemptionTotal         += exemptions;
+            equityTotal            += equity;
+
+            document.getElementById("total-18" + i).innerHTML = fmt(cos);
+            document.getElementById("total-19" + i).innerHTML = fmt(saleProceeds);
+            document.getElementById("total-21" + i).innerHTML = fmt(subtotal);
+            document.getElementById("total-23" + i).innerHTML = fmt(equity);
+            document.getElementById("total-24" + i).innerHTML = fmt(exemptions);
+        }
+
+        // Minimum distribution is total equity minus exemptions and trustee fees across all assets.
+        distributionUnsecureds = equityTotal - exemptionTotal - feesTotal;
+        document.getElementById("total-236").innerHTML = fmt(equityTotal);
+        document.getElementById("total-246").innerHTML = fmt(exemptionTotal);
+        document.getElementById("total-266").innerHTML = fmt(Math.max(0, distributionUnsecureds));
+
+
+    },
+    // Orchestrates all calculations in dependency order
+    all() {
+        this.fairMarketSum();
+        this.debtorFMV();
+        this.liens();
+        this.debtorEquity();
+        this.exemptionsSum();
+        this.chapter7Fees();
+        this.costOfSale();
+    }
+};
+
+// Renders the calculator to a JPEG via html2canvas, then saves it as a PDF using jsPDF.
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const caseNumber = document.getElementById("input-11").value;
+    const fileName = (caseNumber == '' ? 'LiquidationCalc' : 'LiquidationCalc_' + caseNumber + '.pdf');
+    const content = document.getElementById("main-content-container");
+    const w = content.offsetWidth;
+    const h = content.offsetHeight;
+
+    html2canvas(content, {
+        scrollY: -window.scrollY, // Offset scroll position so the full element is captured.
+        scale: 2,                 // 2x scale for sharper JPEG output.
+        ignoreElements: (element) => element.classList.contains("tooltip-wrapper")
+    }).then(function(canvas){
+        const date = new Date();
+        const longDate = date.toLocaleDateString('en-US',{year:"numeric", month:"long", day:"numeric"});
+        const localTime = date.toLocaleTimeString();
+        const img = canvas.toDataURL("image/jpeg", 1); // quality:1 for maximum JPEG quality.
+        const doc = new jsPDF({orientation: "p", unit: "pt", format: [w, h]});
+
+        doc.setProperties({
+            title: "Liquidation Calculator" + (caseNumber ? " - " + caseNumber : ""),
+            subject: "Chapter 13 Liquidation Analysis"
+        });
+        doc.addImage(img, "JPEG", 20, 20, w-40, h-80); // 20pt margin on all sides.
+        doc.text("liquidation-calculator", 20, h-20);  // Footer left: document label.
+        doc.text(longDate + " " + localTime, w-20, h-20, {align: 'right'}); // Footer right: timestamp.
+        doc.save(fileName);
+    });
+}
+</script>
