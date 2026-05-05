@@ -349,7 +349,7 @@
         </div>
         <div class="tblb">
             <div class="tblb-row">
-                <div class="tblb-cell tblb-cell-description">Disbursement Amount:<br><span class="span-fees-description">Debtor's share of proceeds from sale minus exemptions</span></div>
+                <div class="tblb-cell tblb-cell-description">Disbursement Amount:<br><span class="span-fees-description">Debtor's share of fair market value minus exemptions</span></div>
                 <div id="total-101" class="tblb-cell tblb-cell-total"><span id="disburse-val-1">$0.00</span><span id="tooltip-1" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-1" class="tooltip-box"></span></span></div>
                 <div id="total-102" class="tblb-cell tblb-cell-total"><span id="disburse-val-2">$0.00</span><span id="tooltip-2" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-2" class="tooltip-box"></span></span></div>
                 <div id="total-103" class="tblb-cell tblb-cell-total"><span id="disburse-val-3">$0.00</span><span id="tooltip-3" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-3" class="tooltip-box"></span></span></div>
@@ -851,17 +851,16 @@ const calc = {
             const exemptions = Math.min(equity, (asset[i].exemption + asset[i].wildcardExemption));
             const fmv        = asset[i].fairMarketValue;
             const cos        = fmv * asset[i].percentageCOS;
-            const proceeds   = fmv - cos;
             const liens      = asset[i].liens;
             const subtotal   = Math.max(0, fmv - cos - liens);
             const netAfterExemptions = (subtotal * ownership) - exemptions;
 
             const disbursement = (netAfterExemptions > 0)
-                ? Math.max(0, (proceeds * ownership) - exemptions)
+                ? Math.max(0, (fmv * ownership) - exemptions)
                 : 0;
 
             perAssetDisbursement[i] = disbursement;
-            perAssetMeta[i] = { proceeds, ownership, exemptions, disbursement };
+            perAssetMeta[i] = { fmv, ownership, exemptions, disbursement };
         }
 
         // Step 2: total disbursement across all assets.
@@ -910,24 +909,23 @@ const calc = {
             const valSpan    = document.getElementById("disburse-val-" + i);
             const tipWrapper = document.getElementById("tooltip-" + i);
             const tipText    = document.getElementById("tooltip-text-" + i);
-            const { proceeds, ownership, exemptions, disbursement } = perAssetMeta[i];
+            const { fmv, ownership, exemptions, disbursement } = perAssetMeta[i];
 
             if (disbursement > 0) {
                 valSpan.innerHTML = fmt(disbursement);
                 tipWrapper.style.display = "inline-block";
 
                 const ownerPct = (ownership * 100).toFixed(2) + "%";
-                const proceedsTimesOwnership = proceeds * ownership;
 
                 tipText.innerHTML =
                     "<table class='tooltip-table'>" + 
                         "<tr>" + 
-                            "<td class='tip-right'>"  + "(Sale Proceeds &times; Ownership%) &minus; " + "</td>" +
+                            "<td class='tip-right'>"  + "(Fair Market value &times; Ownership%) &minus; " + "</td>" +
                             "<td class='tip-right'>"  + "Exemptions = " + "</td>" + 
                             "<td class='tip-left'>" + "Disbursement Amount" + "</td>" + 
                         "</tr>" + 
                         "<tr>" + 
-                            "<td class='tip-right'>"  + "(" + fmt(proceeds) + " &times; " + ownerPct + ") &minus; " + "</td>" + 
+                            "<td class='tip-right'>"  + "(" + fmt(fmv) + " &times; " + ownerPct + ") &minus; " + "</td>" + 
                             "<td class='tip-right'>"  + fmt(exemptions) + " = " + "</td>" + 
                             "<td class='tip-left'>" + fmt(disbursement) + "</td>" + 
                         "</tr>" + 
