@@ -1,5 +1,5 @@
 # LiquidationCalculator
 
-Javascript liquidation calculator.  
+Javascript bankruptcy liquidation calculator.  
 
 https://seattlech13.com/liquidation-calculator/
