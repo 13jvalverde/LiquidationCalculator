@@ -19,6 +19,7 @@
         --color-accent-secondary:#7F6FC5;
         --color-warn-primary: #F5414F;
         --color-warn-secondary: #FF5964;
+        --color-warn-tertiary: #F5A623;
         --color-border-primary: #DEE2E6;
         --color-border-secondary:#CED4DA;
         --color-border-tertiary: #6E7381;
@@ -103,6 +104,10 @@
 
     .tblb-cell-total-negative {
         background-color: var(--color-warn-secondary);
+    }
+
+    .tblb-cell-total-warning {
+        background-color: var(--color-warn-tertiary);
     }
 
     .tblb-cell-total-bold {
@@ -536,13 +541,22 @@
                 <div id="total-246" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
             </div>
             <div class="tblb-row">
-                <div class="tblb-cell tblb-cell-description"><strong>Chapter 7 Trustee Fees:</strong></div>
-                <div id="total-251" class="tblb-cell"></div>
-                <div id="total-252" class="tblb-cell"></div>
-                <div id="total-253" class="tblb-cell"></div>
-                <div id="total-254" class="tblb-cell"></div>
-                <div id="total-255" class="tblb-cell"></div>
+                <div class="tblb-cell tblb-cell-description"><strong>Equity Minus Exemptions Used:</strong></div>
+                <div id="total-251" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-252" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-253" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-254" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-255" class="tblb-cell tblb-cell-total">$0.00</div>
                 <div id="total-256" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
+            </div>
+            <div class="tblb-row">
+                <div class="tblb-cell tblb-cell-description"><strong>Chapter 7 Trustee Fees:</strong></div>
+                <div id="total-261" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-262" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-263" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-264" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-265" class="tblb-cell tblb-cell-total">$0.00</div>
+                <div id="total-266" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
             </div>
         </div>
         <div class="tblb">
@@ -558,7 +572,7 @@
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
                 <div class="tblb-cell"></div>
-                <div id="total-266" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
+                <div id="total-276" class="tblb-cell tblb-cell-total-bold tblb-cell-indent-right">$0.00</div>
             </div>
         </div>
     </div>
@@ -573,7 +587,7 @@ const CURRENCY_FORMAT = { style: "currency", currency: "USD" };
 const TIER_LIMITS = [5000, 50000, 1000000];
 const TIER_PERCENTAGES = [0.25, 0.10, 0.05, 0.03];
 
-// function formating money.
+// function formatting money.
 const fmt = (n) => n.toLocaleString("en-US", CURRENCY_FORMAT);
 
 // Function returning a new asset with default values.
@@ -585,6 +599,7 @@ const createAsset = () => ({
     exemption: 0,
     wildcardExemption: 0,
     percentageCOS: 0.09,
+    proRatedFees: 0,
     get equity() {
         return this.fairMarketValue - this.liens;
     },
@@ -625,6 +640,7 @@ function resetLiquidationValues() {
             }
         }
     }
+    liquidationObject.feesTotal = 0; // Reset total trustee fees.
 }
 
 // Initialize buttons.
@@ -901,16 +917,24 @@ const calc = {
         if (tier2 > 0) document.getElementById("total-126").innerHTML = fmt(tier2);
         if (tier3 > 0) document.getElementById("total-136").innerHTML = fmt(tier3);
         if (tier4 > 0) document.getElementById("total-146").innerHTML = fmt(tier4);
-        document.getElementById("total-156").innerHTML = fmt(feesTotal);
-        document.getElementById("total-256").innerHTML = fmt(feesTotal);
+        document.getElementById("total-156").innerHTML = fmt(feesTotal); // Column 6 total in Hypothetical Administrative Costs section.
+        document.getElementById("total-266").innerHTML = fmt(feesTotal); // Column 6 total in Final Determination section.
 
         // Step 6: update disbursement values and tooltips. Note: total-101 through total-105 host tooltip markup — update only the child spans.
+        const feeIds = ["261", "262", "263", "264", "265"];
         for (let i = 1; i <= len; i++) {
             const valSpan    = document.getElementById("disburse-val-" + i);
             const tipWrapper = document.getElementById("tooltip-" + i);
             const tipText    = document.getElementById("tooltip-text-" + i);
             const { fmv, ownership, exemptions, disbursement } = perAssetMeta[i];
 
+            // Estimated fee share — proportional to each asset's disbursement.
+            const share    = (totalDisbursement > 0) ? perAssetDisbursement[i] / totalDisbursement : 0;
+            const assetFee = feesTotal * share;
+            asset[i].proRatedFees = assetFee;
+            document.getElementById("total-" + feeIds[i - 1]).innerHTML = (assetFee > 0) ? fmt(assetFee) : '$0.00';
+
+            // Display tooltip showing how the disbursement amount is calculated.
             if (disbursement > 0) {
                 valSpan.innerHTML = fmt(disbursement);
                 tipWrapper.style.display = "inline-block";
@@ -941,8 +965,10 @@ const calc = {
         const { asset } = liquidationObject;
         const len = Object.keys(asset).length;
         const feesTotal = liquidationObject.feesTotal;
+
         let exemptionTotal = 0;
         let equityTotal = 0;
+        let equityMinusExemptionsTotal = 0;
         let distributionUnsecureds = 0;
 
         // Per-asset calculations for the Final Determination of Values section.
@@ -951,27 +977,49 @@ const calc = {
             const fmv  = asset[i].fairMarketValue;
             const cos  = asset[i].fairMarketValue * asset[i].percentageCOS;
             const liens = asset[i].liens;
+            const proRatedFees = asset[i].proRatedFees;
             const subtotal = Math.max(0, fmv - cos - liens);
             const equity = Math.max(0, subtotal * ownership);
             const saleProceeds = Math.max(0, fmv - cos);
             const exemptions = Math.min(equity, (asset[i].exemption + asset[i].wildcardExemption));
+            const equityMinusExemptions = Math.max(0, equity - exemptions);
 
-            exemptionTotal         += exemptions;
-            equityTotal            += equity;
+            exemptionTotal              += exemptions;
+            equityTotal                 += equity;
+            equityMinusExemptionsTotal  += equityMinusExemptions;
 
             document.getElementById("total-18" + i).innerHTML = fmt(cos);
             document.getElementById("total-19" + i).innerHTML = fmt(saleProceeds);
             document.getElementById("total-21" + i).innerHTML = fmt(subtotal);
             document.getElementById("total-23" + i).innerHTML = fmt(equity);
             document.getElementById("total-24" + i).innerHTML = fmt(exemptions);
+            document.getElementById("total-25" + i).innerHTML = fmt(equityMinusExemptions);
+
+
+            // Warn the user if fees exceed equity minus exemptions
+            if (proRatedFees > 0 && proRatedFees >= equityMinusExemptions){
+                document.getElementById("total-25" + i).classList.replace("tblb-cell-total", "tblb-cell-total-warning");
+                document.getElementById("total-26" + i).classList.replace("tblb-cell-total", "tblb-cell-total-warning");
+
+                document.getElementById("total-25" + i).innerHTML = 
+                        fmt(equityMinusExemptions) +
+                        "<span class='tooltip-wrapper'><span class='tooltip-icon'>&#9432;</span>" +
+                        "<span class='tooltip-box'>Trustee fees exceed available equity on this asset.<br>" +
+                        "A Chapter 7 trustee would not liquidate an asset<br>" +
+                        "that provides no benefit to unsecured creditors.</span></span>";
+            }else{
+                document.getElementById("total-25" + i).classList.replace("tblb-cell-total-warning", "tblb-cell-total");
+                document.getElementById("total-26" + i).classList.replace("tblb-cell-total-warning", "tblb-cell-total");
+                document.getElementById("total-25" + i).innerHTML = fmt(equityMinusExemptions);
+            }
         }
 
         // Minimum distribution is total equity minus exemptions and trustee fees across all assets.
         distributionUnsecureds = equityTotal - exemptionTotal - feesTotal;
         document.getElementById("total-236").innerHTML = fmt(equityTotal);
         document.getElementById("total-246").innerHTML = fmt(exemptionTotal);
-        document.getElementById("total-266").innerHTML = fmt(Math.max(0, distributionUnsecureds));
-
+        document.getElementById("total-256").innerHTML = fmt(equityMinusExemptionsTotal);
+        document.getElementById("total-276").innerHTML = fmt(Math.max(0, distributionUnsecureds));
 
     },
     // Orchestrates all calculations in dependency order
