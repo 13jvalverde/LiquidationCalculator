@@ -355,11 +355,11 @@
         <div class="tblb">
             <div class="tblb-row">
                 <div class="tblb-cell tblb-cell-description">Disbursement Amount:<br><span class="span-fees-description">Debtor's share of fair market value minus exemptions</span></div>
-                <div id="total-101" class="tblb-cell tblb-cell-total"><span id="disburse-val-1">$0.00</span><span id="tooltip-1" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-1" class="tooltip-box"></span></span></div>
-                <div id="total-102" class="tblb-cell tblb-cell-total"><span id="disburse-val-2">$0.00</span><span id="tooltip-2" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-2" class="tooltip-box"></span></span></div>
-                <div id="total-103" class="tblb-cell tblb-cell-total"><span id="disburse-val-3">$0.00</span><span id="tooltip-3" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-3" class="tooltip-box"></span></span></div>
-                <div id="total-104" class="tblb-cell tblb-cell-total"><span id="disburse-val-4">$0.00</span><span id="tooltip-4" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-4" class="tooltip-box"></span></span></div>
-                <div id="total-105" class="tblb-cell tblb-cell-total"><span id="disburse-val-5">$0.00</span><span id="tooltip-5" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-5" class="tooltip-box"></span></span></div>
+                <div id="total-101" class="tblb-cell tblb-cell-total"><span id="disburse-val-1">$0.00</span><span id="tooltip-1" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-1" class="tooltip-box"></span></div>
+                <div id="total-102" class="tblb-cell tblb-cell-total"><span id="disburse-val-2">$0.00</span><span id="tooltip-2" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-2" class="tooltip-box"></span></div>
+                <div id="total-103" class="tblb-cell tblb-cell-total"><span id="disburse-val-3">$0.00</span><span id="tooltip-3" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-3" class="tooltip-box"></span></div>
+                <div id="total-104" class="tblb-cell tblb-cell-total"><span id="disburse-val-4">$0.00</span><span id="tooltip-4" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-4" class="tooltip-box"></span></div>
+                <div id="total-105" class="tblb-cell tblb-cell-total"><span id="disburse-val-5">$0.00</span><span id="tooltip-5" class="tooltip-wrapper" style="display:none"><span class="tooltip-icon">&#9432;</span><span id="tooltip-text-5" class="tooltip-box"></span></div>
                 <div id="total-106" class="tblb-cell tblb-cell-total tblb-cell-indent-right">$0.00</div>
             </div>
             <div class="tblb-row">
@@ -1020,7 +1020,6 @@ const calc = {
         document.getElementById("total-246").innerHTML = fmt(exemptionTotal);
         document.getElementById("total-256").innerHTML = fmt(equityMinusExemptionsTotal);
         document.getElementById("total-276").innerHTML = fmt(Math.max(0, distributionUnsecureds));
-
     },
     // Orchestrates all calculations in dependency order
     all() {
